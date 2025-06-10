@@ -39,9 +39,12 @@ print(f"Example original label: {y_train_orig[0]}, One-hot: {y_train[0]}")
 # 符合專案要求的模型：僅使用 Dense 層、ReLU 活化，輸出層 Softmax
 model = keras.Sequential([
     keras.layers.InputLayer(input_shape=(784,)), # 輸入層，784 個特徵 (28*28 pixels)
-    keras.layers.Dense(256, activation='relu', name='dense_1'),
-    keras.layers.Dense(128, activation='relu', name='dense_2'),
-    keras.layers.Dense(64, activation='relu', name='dense_3'),
+    keras.layers.Dense(512, activation='relu', name='dense_1'),
+    keras.layers.Dropout(0.3), # Dropout 層
+    keras.layers.Dense(256, activation='relu', name='dense_2'),
+    keras.layers.Dropout(0.2), # Dropout 層
+    keras.layers.Dense(128, activation='relu', name='dense_3'),
+    # No dropout before the final softmax layer is common practice
     keras.layers.Dense(num_classes, activation='softmax', name='output_softmax') # 輸出層
 ])
 
@@ -53,7 +56,7 @@ model.compile(optimizer='adam',
               metrics=['accuracy'])
 
 # --- 6. 訓練模型 ---
-epochs = 30 # 可以調整
+epochs = 50 # 增加訓練週期
 batch_size = 128 # 可以調整
 validation_split = 0.1 # 使用 10% 的訓練資料作為驗證集
 
